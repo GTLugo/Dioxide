@@ -1,18 +1,7 @@
-[package]
-name    = "quark_os_entry"
-version = "0.1.0"
-edition = "2021"
-
-[profile.dev]
-panic = "abort"
-
-[profile.release]
-panic = "abort"
-
-[dependencies]
-#bootloader_api = "0.11"
-
-[dependencies.quark_os]
-path     = "quark_os"
-version  = "*"
-features = ["rpi5"]
+[workspace]
+members = [
+  "crates/quark_os",
+  "crates/quark_os_derive",
+  "crates/quark_os_entry",
+]
+resolver = "3"

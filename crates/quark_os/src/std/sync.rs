@@ -21,20 +21,15 @@ impl<T> Mutex<T> {
     }
   }
 
-  pub fn lock<'a>(&'a self) -> MutexGuard<'a, T> {
-    while !self
-      .is_acquired
-      .swap(true, core::sync::atomic::Ordering::AcqRel)
-    {
+  pub fn lock(&self) -> MutexGuard<'_, T> {
+    while !self.is_acquired.swap(true, core::sync::atomic::Ordering::AcqRel) {
       spin_loop();
     }
     MutexGuard { mutex: self }
   }
 
   pub fn unlock(&self) {
-    self
-      .is_acquired
-      .store(false, core::sync::atomic::Ordering::Release);
+    self.is_acquired.store(false, core::sync::atomic::Ordering::Release);
   }
 }
 
@@ -145,20 +140,12 @@ impl Once {
   }
 
   pub fn call_once(&self, mut init: impl FnMut()) {
-    if !self
-      .is_initialized
-      .load(core::sync::atomic::Ordering::Acquire)
-    {
+    if !self.is_initialized.load(core::sync::atomic::Ordering::Acquire) {
       let _ = self.mutex.lock();
 
-      if !self
-        .is_initialized
-        .load(core::sync::atomic::Ordering::Relaxed)
-      {
+      if !self.is_initialized.load(core::sync::atomic::Ordering::Relaxed) {
         init();
-        self
-          .is_initialized
-          .store(true, core::sync::atomic::Ordering::Release);
+        self.is_initialized.store(true, core::sync::atomic::Ordering::Release);
       }
     }
   }

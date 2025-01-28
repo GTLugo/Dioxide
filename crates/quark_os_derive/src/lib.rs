@@ -15,7 +15,7 @@ pub fn entrypoint(_: TokenStream, annotated_item: TokenStream) -> TokenStream {
       }
     }
 
-    #[no_mangle]
+    #[unsafe(no_mangle)]
     pub extern "C" fn _start() -> ! {
       #name();
       loop {

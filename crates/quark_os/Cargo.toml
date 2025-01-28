@@ -1,0 +1,13 @@
+[package]
+name    = "quark_os"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies.quark_os_derive]
+path    = "../quark_os_derive"
+version = "*"
+
+[features]
+default = ["x86"]
+rpi5 = []
+x86 = []
