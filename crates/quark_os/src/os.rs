@@ -1,8 +1,6 @@
 use crate::std::*;
 
-pub struct OS {
-  
-}
+pub struct OS {}
 
 impl OS {
   pub fn new() -> Self {

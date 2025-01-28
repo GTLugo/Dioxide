@@ -48,7 +48,6 @@ impl Diagnostics for X86Console {
 }
 
 pub fn console() -> MutexGuard<'static, impl Console> {
-  static CONSOLE: LazyLock<Mutex<X86Console>> =
-    LazyLock::new(|| Mutex::new(X86Console::new()));
+  static CONSOLE: LazyLock<Mutex<X86Console>> = LazyLock::new(|| Mutex::new(X86Console::new()));
   CONSOLE.lock()
 }

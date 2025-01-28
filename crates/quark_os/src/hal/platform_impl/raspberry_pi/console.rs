@@ -48,7 +48,6 @@ impl Diagnostics for PiConsole {
 }
 
 pub fn console() -> MutexGuard<'static, impl Console> {
-  static CONSOLE: LazyLock<Mutex<PiConsole>> =
-    LazyLock::new(|| Mutex::new(PiConsole::new()));
+  static CONSOLE: LazyLock<Mutex<PiConsole>> = LazyLock::new(|| Mutex::new(PiConsole::new()));
   CONSOLE.lock()
 }
