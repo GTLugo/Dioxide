@@ -3,5 +3,5 @@
 
 #[quark_os::entrypoint]
 fn main() {
-  quark_os::OS::new().run();
+  quark_os::OS::default().run();
 }
