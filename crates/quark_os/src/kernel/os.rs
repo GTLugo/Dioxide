@@ -1,4 +1,4 @@
-use crate::std::*;
+use crate::{error::OsError, std::*};
 
 pub struct OS {}
 
@@ -13,7 +13,8 @@ impl OS {
     Self {}
   }
 
-  pub fn run(self) {
-    println!("bau bau");
+  pub fn run(self) -> Result<(), OsError> {
+    // println!("bau bau");
+    Ok(())
   }
 }

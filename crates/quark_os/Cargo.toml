@@ -3,6 +3,10 @@ name    = "quark_os"
 version = "0.1.0"
 edition = "2024"
 
+[dependencies]
+bootloader_api = "0.11.x"
+thiserror = { version = "2.0.x", default-features = false }
+
 [dependencies.quark_os_derive]
 path    = "../quark_os_derive"
 version = "*"

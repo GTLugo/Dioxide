@@ -1,8 +1,4 @@
 pub mod console;
-mod platform_impl;
+pub mod sys;
 
-pub fn loop_forever() -> ! {
-  loop {
-    nop!();
-  }
-}
+mod platform_impl;

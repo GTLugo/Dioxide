@@ -21,7 +21,7 @@ macro_rules! print {
 macro_rules! println {
     () => ($crate::print!("\n"));
     ($($arg:tt)*) => ({
-        $crate::std::print::_print(format_args!("{}\n", $($arg)*));
+        $crate::std::print::_print(format_args_nl!($($arg)*));
     })
 }
 
@@ -45,6 +45,6 @@ macro_rules! eprint {
 macro_rules! eprintln {
     () => ($crate::print!("\n"));
     ($($arg:tt)*) => ({
-        $crate::std::print::_eprint(format_args!("{}\n", $($arg)*));
+        $crate::std::print::_eprint(format_args_nl!($($arg)*));
     })
 }

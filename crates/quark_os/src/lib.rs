@@ -1,5 +1,6 @@
 #![no_std]
 #![no_main]
+#![feature(format_args_nl)]
 
 #[macro_export]
 macro_rules! nop {
@@ -10,11 +11,12 @@ macro_rules! nop {
   };
 }
 
+pub mod kernel;
+
 mod hal;
-mod os;
-mod panic;
+mod error;
 mod std;
 
-pub use os::OS;
-
 pub use quark_os_derive::entrypoint;
+
+pub use crate::kernel::Kernel;
