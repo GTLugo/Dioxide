@@ -1,16 +1,21 @@
+use bootloader_api::BootInfo;
+
 use self::os::OS;
 use crate::{eprintln, hal::sys::halt};
 
 mod os;
 
 pub struct Kernel {
+  boot_info: &'static mut BootInfo,
   os: OS,
 }
 
 impl Kernel {
-  pub fn new(_boot_info: &'static mut bootloader_api::BootInfo) -> Self {
-    let os = OS::default();
-    Self { os }
+  pub fn new(boot_info: &'static mut BootInfo) -> Self {
+    let os = OS {
+      framebuffer: boot_info.framebuffer.take(),
+    };
+    Self { boot_info, os }
   }
 
   pub fn run(self) -> ! {
