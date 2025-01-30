@@ -11,12 +11,6 @@ keywords.workspace = true
 categories.workspace = true
 repository.workspace = true
 
-[profile.dev]
-panic = "abort"
-
-[profile.release]
-panic = "abort"
-
 [dependencies]
 bootloader_api = "0.11.x"
 thiserror = { version = "2.0.x", default-features = false }
