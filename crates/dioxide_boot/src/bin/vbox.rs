@@ -29,6 +29,8 @@ pub struct VirtualBox {
   _uefi: Uefi,
 }
 
+// TODO: Make better error handlers
+
 impl VirtualBox {
   pub fn new(name: impl Into<String>, image: impl Into<PathBuf>, uefi: Uefi) -> Self {
     let image = image.into();
@@ -44,7 +46,7 @@ impl VirtualBox {
 
   pub fn run(&self) -> Result<(), ExitStatusError> {
     self.stop();
-    self.remove_old_image()?;
+    self.remove_old_image();
     self.set_new_image()?;
     self.start()
   }
@@ -56,7 +58,7 @@ impl VirtualBox {
     let _ = vm.status().unwrap();
   }
 
-  fn remove_old_image(&self) -> Result<(), ExitStatusError> {
+  fn remove_old_image(&self) {
     let mut vm = Command::new("VBoxManage");
     vm.arg("storageattach")
       .arg(&self.name)
@@ -83,7 +85,12 @@ impl VirtualBox {
     vm.stderr(Stdio::null());
     let exit_status = vm.status().unwrap();
 
-    exit_status.exit_ok()
+    if !exit_status.success() {
+      eprintln!("closemedium error");
+      // process::exit(exit_status.code().unwrap_or(-1));
+    }
+
+    // exit_status.exit_ok()
 
     // let _ = remove_file(&vdi_dir);
   }
