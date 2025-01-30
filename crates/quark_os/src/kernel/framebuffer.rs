@@ -48,47 +48,41 @@ impl FrameBuffer {
     }
 
     // set pixel based on color format
-    let pixel_buffer = &mut self.buffer[byte_offset..];
+
+    let pixel_bytes = self
+      .buffer
+      .get_mut(byte_offset..(byte_offset + self.info.bytes_per_pixel))
+      .ok_or(OsError::OutOfBounds(byte_offset))?;
     #[allow(clippy::get_first)]
     match self.info.pixel_format {
       PixelFormat::Rgb => {
-        let old_color = Color {
-          r: *pixel_buffer.get(0).ok_or(OsError::OutOfBounds(byte_offset))?,
-          g: *pixel_buffer.get(1).ok_or(OsError::OutOfBounds(byte_offset))?,
-          b: *pixel_buffer.get(2).ok_or(OsError::OutOfBounds(byte_offset))?,
-        };
+        let [r, g, b]: &mut [u8; 3] = pixel_bytes.try_into().map_err(|_| OsError::OutOfBounds(byte_offset))?;
 
-        *pixel_buffer.get_mut(0).ok_or(OsError::OutOfBounds(byte_offset))? = color.r;
-        *pixel_buffer.get_mut(1).ok_or(OsError::OutOfBounds(byte_offset))? = color.g;
-        *pixel_buffer.get_mut(2).ok_or(OsError::OutOfBounds(byte_offset))? = color.b;
+        *r = color.r;
+        *g = color.g;
+        *b = color.b;
 
-        Ok(old_color)
+        Ok(Color { r: *r, g: *g, b: *b })
       }
       PixelFormat::Bgr => {
-        let old_color = Color {
-          r: *pixel_buffer.get(2).ok_or(OsError::OutOfBounds(byte_offset))?,
-          g: *pixel_buffer.get(1).ok_or(OsError::OutOfBounds(byte_offset))?,
-          b: *pixel_buffer.get(0).ok_or(OsError::OutOfBounds(byte_offset))?,
-        };
+        let [b, g, r]: &mut [u8; 3] = pixel_bytes.try_into().map_err(|_| OsError::OutOfBounds(byte_offset))?;
 
-        *pixel_buffer.get_mut(2).ok_or(OsError::OutOfBounds(byte_offset))? = color.r;
-        *pixel_buffer.get_mut(1).ok_or(OsError::OutOfBounds(byte_offset))? = color.g;
-        *pixel_buffer.get_mut(0).ok_or(OsError::OutOfBounds(byte_offset))? = color.b;
+        *r = color.r;
+        *g = color.g;
+        *b = color.b;
 
-        Ok(old_color)
+        Ok(Color { r: *r, g: *g, b: *b })
       }
       PixelFormat::U8 => {
-        let old_color = *pixel_buffer.get(0).ok_or(OsError::OutOfBounds(byte_offset))?;
+        let [value]: &mut [u8; 1] = pixel_bytes.try_into().map_err(|_| OsError::OutOfBounds(byte_offset))?;
 
         // use a simple average-based grayscale transform
-        let gray = color.r / 3 + color.g / 3 + color.b / 3;
-
-        *pixel_buffer.get_mut(0).ok_or(OsError::OutOfBounds(byte_offset))? = gray;
+        *value = color.r / 3 + color.g / 3 + color.b / 3;
 
         Ok(Color {
-          r: old_color,
-          g: old_color,
-          b: old_color,
+          r: *value,
+          g: *value,
+          b: *value,
         })
       }
       other => panic!("unknown pixel format `{other:?}`"),
