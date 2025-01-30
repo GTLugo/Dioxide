@@ -56,7 +56,8 @@ impl FrameBuffer {
     #[allow(clippy::get_first)]
     match self.info.pixel_format {
       PixelFormat::Rgb => {
-        let [r, g, b]: &mut [u8; 3] = pixel_bytes.try_into().map_err(|_| OsError::OutOfBounds(byte_offset))?;
+        // SAFETY: The underlying array of a slice can be reinterpreted as an actual array `[T; N]` if `N` is not greater than the slice's length.
+        let [r, g, b] = unsafe { &mut *(pixel_bytes.as_mut_ptr() as *mut [u8; 3]) };
 
         *r = color.r;
         *g = color.g;
@@ -65,7 +66,7 @@ impl FrameBuffer {
         Ok(Color { r: *r, g: *g, b: *b })
       }
       PixelFormat::Bgr => {
-        let [b, g, r]: &mut [u8; 3] = pixel_bytes.try_into().map_err(|_| OsError::OutOfBounds(byte_offset))?;
+        let [b, g, r] = unsafe { &mut *(pixel_bytes.as_mut_ptr() as *mut [u8; 3]) };
 
         *r = color.r;
         *g = color.g;
@@ -74,7 +75,7 @@ impl FrameBuffer {
         Ok(Color { r: *r, g: *g, b: *b })
       }
       PixelFormat::U8 => {
-        let [value]: &mut [u8; 1] = pixel_bytes.try_into().map_err(|_| OsError::OutOfBounds(byte_offset))?;
+        let [value] = unsafe { &mut *(pixel_bytes.as_mut_ptr() as *mut [u8; 1]) };
 
         // use a simple average-based grayscale transform
         *value = color.r / 3 + color.g / 3 + color.b / 3;

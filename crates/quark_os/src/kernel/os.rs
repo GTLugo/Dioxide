@@ -19,7 +19,7 @@ impl OS {
         framebuffer.set_pixel(position, color)?;
       }
     }
-
+    
     // println!("bau bau");
     Ok(())
   }
