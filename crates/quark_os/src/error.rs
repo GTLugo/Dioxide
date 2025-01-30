@@ -14,14 +14,14 @@ impl Display for ErrorCode {
 }
 
 #[derive(Error, Debug)]
-#[error("OS error `{}`", code)]
-pub struct OsError {
-  code: ErrorCode,
+pub enum OsError {
+  #[error("OS error | out of bounds access at index `{0}`")]
+  OutOfBounds(usize),
 }
 
-#[allow(unused)]
-impl OsError {
-  pub fn new(code: i32) -> Self {
-    Self { code: ErrorCode(code) }
-  }
-}
+// #[allow(unused)]
+// impl OsError {
+//   pub fn new(code: i32) -> Self {
+//     Self { code: ErrorCode(code) }
+//   }
+// }

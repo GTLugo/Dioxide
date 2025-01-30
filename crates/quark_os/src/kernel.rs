@@ -1,9 +1,10 @@
 use bootloader_api::BootInfo;
 
-use self::os::OS;
+use self::{framebuffer::FrameBuffer, os::OS};
 use crate::{eprintln, hal::sys::halt};
 
 mod os;
+mod framebuffer;
 
 pub struct Kernel {
   boot_info: &'static mut BootInfo,
@@ -13,7 +14,7 @@ pub struct Kernel {
 impl Kernel {
   pub fn new(boot_info: &'static mut BootInfo) -> Self {
     let os = OS {
-      framebuffer: boot_info.framebuffer.take(),
+      framebuffer: FrameBuffer::new(boot_info),
     };
     Self { boot_info, os }
   }

@@ -2,7 +2,7 @@
 name = "quark_os_boot"
 version = "0.1.0"
 edition = "2024"
-default-run = "qemu-uefi"
+default-run = "vbox-uefi"
 
 [dependencies]
 ovmf-prebuilt = "0.2.x"
