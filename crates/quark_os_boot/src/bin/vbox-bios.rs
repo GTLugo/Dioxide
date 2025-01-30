@@ -3,7 +3,7 @@
 use std::{
   env,
   path::PathBuf,
-  process::{Command, ExitStatusError},
+  process::{Command, ExitStatusError, Stdio},
 };
 
 const NAME: &str = "QuarkOS_BIOS";
@@ -22,6 +22,7 @@ fn main() -> Result<(), ExitStatusError> {
 fn stop() {
   let mut vm = Command::new("VBoxManage");
   vm.arg("startvm").arg(NAME).arg("--type").arg("emergencystop");
+  vm.stderr(Stdio::null());
   let _ = vm.status().unwrap();
 }
 
@@ -32,13 +33,14 @@ fn remove_old_image(vdi_dir: &PathBuf) -> Result<(), ExitStatusError> {
     .arg("--storagectl")
     .arg("IDE")
     .arg("--port")
-    .arg("1")
+    .arg("0")
     .arg("--device")
-    .arg("1")
+    .arg("0")
     .arg("--type")
     .arg("hdd")
     .arg("--medium")
     .arg("none");
+  vm.stderr(Stdio::null());
   let exit_status = vm.status().unwrap();
 
   if !exit_status.success() {
@@ -48,6 +50,7 @@ fn remove_old_image(vdi_dir: &PathBuf) -> Result<(), ExitStatusError> {
 
   let mut vm = Command::new("VBoxManage");
   vm.arg("closemedium").arg("disk").arg(vdi_dir).arg("--delete");
+  vm.stderr(Stdio::null());
   let exit_status = vm.status().unwrap();
 
   exit_status.exit_ok()
@@ -62,6 +65,7 @@ fn set_new_image(img_dir: &PathBuf, vdi_dir: &PathBuf) -> Result<(), ExitStatusE
     .arg(vdi_dir)
     .arg("--format")
     .arg("VDI");
+  vm.stderr(Stdio::null());
   let exit_status = vm.status().unwrap();
 
   if !exit_status.success() {
@@ -70,7 +74,8 @@ fn set_new_image(img_dir: &PathBuf, vdi_dir: &PathBuf) -> Result<(), ExitStatusE
   }
 
   let mut vm = Command::new("VBoxManage");
-  vm.arg("modifyhd").arg(vdi_dir).arg("--resizebyte").arg("2048");
+  vm.arg("modifymedium").arg(vdi_dir).arg("--resize").arg("2048");
+  vm.stderr(Stdio::null());
   let exit_status = vm.status().unwrap();
 
   if !exit_status.success() {
@@ -84,13 +89,14 @@ fn set_new_image(img_dir: &PathBuf, vdi_dir: &PathBuf) -> Result<(), ExitStatusE
     .arg("--storagectl")
     .arg("IDE")
     .arg("--port")
-    .arg("1")
+    .arg("0")
     .arg("--device")
-    .arg("1")
+    .arg("0")
     .arg("--type")
     .arg("hdd")
     .arg("--medium")
     .arg(vdi_dir);
+  vm.stderr(Stdio::null());
   let exit_status = vm.status().unwrap();
 
   exit_status.exit_ok()
@@ -99,6 +105,7 @@ fn set_new_image(img_dir: &PathBuf, vdi_dir: &PathBuf) -> Result<(), ExitStatusE
 fn start() -> Result<(), ExitStatusError> {
   let mut vm = Command::new("VBoxManage");
   vm.arg("startvm").arg(NAME);
+  vm.stderr(Stdio::null());
   let exit_status = vm.status().unwrap();
 
   exit_status.exit_ok()
