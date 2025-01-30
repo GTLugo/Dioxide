@@ -3,6 +3,7 @@ name    = "dioxide"
 version = "0.0.1"
 
 readme.workspace = true
+description.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
