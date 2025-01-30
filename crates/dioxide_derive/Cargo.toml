@@ -1,7 +1,14 @@
 [package]
 name = "dioxide_derive"
 version = "0.1.0"
-edition = "2024"
+
+readme.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+keywords.workspace = true
+categories.workspace = true
+repository.workspace = true
 
 [lib]
 proc-macro = true

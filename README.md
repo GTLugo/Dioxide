@@ -1,4 +1,4 @@
-# `dioxide_os`
+# [`dioxide_os`](https://github.com/dioxide-os/dioxide)
 
 Dioxide is an experimental OS built in pure Rust for educational purposes. It was made by following the excellent material by phil-opp, [Writing an OS in Rust](https://os.phil-opp.com/).
 
