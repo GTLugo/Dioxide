@@ -1,9 +1,8 @@
 [workspace]
-default-members = ["crates/quark_os_boot"]
+default-members = ["crates/dioxide_boot"]
 members = [
-  "crates/quark_os",
-  "crates/quark_os_boot",
-  "crates/quark_os_derive",
-  "crates/quark_os_entry", 
+  "crates/dioxide", 
+  "crates/dioxide_boot",
+  "crates/dioxide_derive",
 ]
 resolver = "3"

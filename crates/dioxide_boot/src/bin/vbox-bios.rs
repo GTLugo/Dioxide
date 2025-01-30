@@ -7,5 +7,5 @@ mod vbox;
 use std::process::ExitStatusError;
 
 fn main() -> Result<(), ExitStatusError> {
-  vbox::VirtualBox::new("quark_os_uefi", env!("UEFI_IMAGE"), vbox::Uefi::Enabled).run()
+  vbox::VirtualBox::new("dioxide_bios", env!("BIOS_IMAGE"), vbox::Uefi::Disabled).run()
 }

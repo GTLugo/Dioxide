@@ -1,5 +1,5 @@
 [package]
-name = "quark_os_boot"
+name = "dioxide_boot"
 version = "0.1.0"
 edition = "2024"
 default-run = "vbox-uefi"
@@ -10,7 +10,7 @@ ovmf-prebuilt = "0.2.x"
 [build-dependencies]
 bootloader = "0.11.x"
 
-[build-dependencies.quark_os_entry]
-path = "../quark_os_entry"
+[build-dependencies.dioxide]
+path = "../dioxide"
 artifact = "bin"
 target = "x86_64-unknown-none"

@@ -1,5 +1,5 @@
 [package]
-name    = "quark_os"
+name    = "dioxide"
 version = "0.1.0"
 edition = "2024"
 
@@ -7,11 +7,16 @@ edition = "2024"
 bootloader_api = "0.11.x"
 thiserror = { version = "2.0.x", default-features = false }
 
-[dependencies.quark_os_derive]
-path    = "../quark_os_derive"
+[dependencies.dioxide_derive]
+path    = "../dioxide_derive"
 version = "*"
 
 [features]
 default = ["x86"]
 rpi5 = []
 x86 = []
+
+[[bin]]
+name = "dioxide"
+test = false
+bench = false

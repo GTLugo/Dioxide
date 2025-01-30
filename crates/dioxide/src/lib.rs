@@ -17,6 +17,6 @@ mod hal;
 mod error;
 mod std;
 
-pub use quark_os_derive::entrypoint;
+pub use dioxide_derive::entrypoint;
 
 pub use crate::kernel::Kernel;

@@ -1,5 +1,5 @@
 [package]
-name = "quark_os_derive"
+name = "dioxide_derive"
 version = "0.1.0"
 edition = "2024"
 
