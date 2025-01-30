@@ -32,7 +32,8 @@ pub struct VirtualBox {
 impl VirtualBox {
   pub fn new(name: impl Into<String>, image: impl Into<PathBuf>, uefi: Uefi) -> Self {
     let image = image.into();
-    let vdi = image.with_file_name(format!("{uefi}.vdi"));
+    let current_exe = std::env::current_exe().unwrap();
+    let vdi = current_exe.with_file_name(format!("{uefi}.vdi"));
     Self {
       name: name.into(),
       image,
