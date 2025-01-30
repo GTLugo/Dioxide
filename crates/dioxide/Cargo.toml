@@ -16,7 +16,7 @@ thiserror = { version = "2.0.x", default-features = false }
 
 [dependencies.dioxide_derive]
 path    = "../dioxide_derive"
-version = "*"
+version = "0.0.1"
 
 [features]
 default = ["x86"]

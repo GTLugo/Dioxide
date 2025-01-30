@@ -20,5 +20,6 @@ bootloader = "0.11.x"
 
 [build-dependencies.dioxide]
 path = "../dioxide"
+version = "0.0.1"
 artifact = "bin"
 target = "x86_64-unknown-none"
