@@ -1,7 +1,7 @@
 use bootloader_api::BootInfo;
 
 use self::{framebuffer::FrameBuffer, os::OS};
-use crate::{eprintln, hal::sys::halt};
+use crate::hal::sys::halt;
 
 mod framebuffer;
 mod os;
@@ -27,7 +27,7 @@ impl Kernel {
 
   pub fn run(self) -> ! {
     if let Err(error) = self.os.run() {
-      // eprintln!("FATAL | {error}");
+      panic!("FATAL | {error}");
     }
     halt()
   }
