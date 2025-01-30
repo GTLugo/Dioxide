@@ -3,11 +3,14 @@ use bootloader_api::BootInfo;
 use self::{framebuffer::FrameBuffer, os::OS};
 use crate::{eprintln, hal::sys::halt};
 
-mod os;
 mod framebuffer;
+mod os;
 
+///
+/// This pretty much just sets up the OS. Wraps and converts FFI boot objects.
+///
 pub struct Kernel {
-  boot_info: &'static mut BootInfo,
+  _boot_info: &'static mut BootInfo,
   os: OS,
 }
 
@@ -16,7 +19,10 @@ impl Kernel {
     let os = OS {
       framebuffer: FrameBuffer::new(boot_info),
     };
-    Self { boot_info, os }
+    Self {
+      _boot_info: boot_info,
+      os,
+    }
   }
 
   pub fn run(self) -> ! {
