@@ -56,7 +56,7 @@ impl FrameBuffer {
     #[allow(clippy::get_first)]
     match self.info.pixel_format {
       PixelFormat::Rgb => {
-        // SAFETY: The underlying array of a slice can be reinterpreted as an actual array `[T; N]` if `N` is not greater than the slice's length.
+        // SAFETY: (taken from rustc) The underlying array of a slice can be reinterpreted as an actual array `[T; N]` if `N` is not greater than the slice's length.
         let [r, g, b] = unsafe { &mut *(pixel_bytes.as_mut_ptr() as *mut [u8; 3]) };
 
         *r = color.r;
