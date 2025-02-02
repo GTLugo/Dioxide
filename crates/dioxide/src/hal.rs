@@ -1,4 +1,3 @@
 pub mod console;
-pub mod sys;
 
-mod platform_impl;
+pub(crate) mod platform_impl;

@@ -1,25 +1,34 @@
-use super::framebuffer::{self, FrameBuffer};
+use super::canvas::{self, Canvas};
 use crate::{error::OsError, std::*};
 
 pub struct OS {
-  pub framebuffer: Option<FrameBuffer>,
+  pub canvas: Option<Canvas>,
 }
 
 impl OS {
   pub fn run(mut self) -> Result<(), OsError> {
-    if let Some(framebuffer) = self.framebuffer.as_mut() {
-      for byte in framebuffer.iter_mut() {
-        *byte = 0x69;
-      }
+    if let Some(canvas) = self.canvas.as_mut() {
+      // for byte in framebuffer.iter_mut() {
+      //   *byte = 0x69;
+      // }
 
-      for (x, y) in (20..100).flat_map(|x| (30..100).map(move |y| (x, y))) {
-        let position = framebuffer::Position { x, y };
-        let color = framebuffer::Color { r: 0, g: 255, b: 0 };
+      // for (x, y) in (20..100).flat_map(|x| (30..100).map(move |y| (x, y))) {
+      //   let position = framebuffer::Position { x, y };
+      //   let color = framebuffer::Color { r: 0, g: 255, b: 0 };
 
-        framebuffer.set_pixel(position, color)?;
-      }
+      //   framebuffer.set_pixel(position, color)?;
+      // }
     }
-    
+
+    // const VGA_BUFFER: *mut u8 = 0xb8000 as _;
+    // static HELLO: &[u8] = b"Hello World!";
+    // for (i, &byte) in HELLO.iter().enumerate() {
+    //   unsafe {
+    //     *VGA_BUFFER.offset(i as isize * 2) = byte;
+    //     *VGA_BUFFER.offset(i as isize * 2 + 1) = 0xb;
+    //   }
+    // }
+
     // println!("bau bau");
     Ok(())
   }

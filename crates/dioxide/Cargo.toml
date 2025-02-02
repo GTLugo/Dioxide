@@ -14,6 +14,7 @@ repository.workspace = true
 [dependencies]
 bootloader_api = "0.11.x"
 thiserror = { version = "2.0.x", default-features = false }
+embedded-graphics = "0.8.x"
 
 [dependencies.dioxide_derive]
 path    = "../dioxide_derive"

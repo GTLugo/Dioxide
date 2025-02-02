@@ -15,6 +15,8 @@ impl Display for ErrorCode {
 
 #[derive(Error, Debug)]
 pub enum OsError {
+  #[error("OS error | unknown error")]
+  Unknown,
   #[error("OS error | out of bounds access at index `{0}`")]
   OutOfBounds(usize),
 }

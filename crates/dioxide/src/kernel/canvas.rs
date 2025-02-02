@@ -1,7 +1,10 @@
+use core::convert::Infallible;
+
 use bootloader_api::{
   BootInfo,
   info::{FrameBufferInfo, PixelFormat},
 };
+use embedded_graphics::{pixelcolor::Rgb888, prelude::*};
 
 use crate::error::OsError;
 
@@ -18,12 +21,12 @@ pub struct Color {
   pub b: u8,
 }
 
-pub struct FrameBuffer {
+pub struct Canvas {
   buffer: &'static mut [u8],
   info: FrameBufferInfo,
 }
 
-impl FrameBuffer {
+impl Canvas {
   pub fn new(boot_info: &mut BootInfo) -> Option<Self> {
     boot_info.framebuffer.take().map(|framebuffer| {
       let info = framebuffer.info();
@@ -90,6 +93,19 @@ impl FrameBuffer {
     }
   }
 
+  pub fn draw_pixel(&mut self, Pixel(coord, color): Pixel<Rgb888>) {
+    let (width, height) = (self.info.width, self.info.height);
+    let (x, y) = (coord.x as usize, coord.y as usize);
+
+    if (0..width).contains(&x) && (0..height).contains(&y) {
+      let _ = self.set_pixel(Position { x, y }, Color {
+        r: color.r(),
+        g: color.g(),
+        b: color.b(),
+      });
+    }
+  }
+
   pub fn iter(&self) -> FrameBufferIterator {
     FrameBufferIterator {
       framebuffer: self,
@@ -106,7 +122,7 @@ impl FrameBuffer {
 }
 
 pub struct FrameBufferIterator<'a> {
-  framebuffer: &'a FrameBuffer,
+  framebuffer: &'a Canvas,
   index: usize,
 }
 
@@ -121,7 +137,7 @@ impl<'a> Iterator for FrameBufferIterator<'a> {
 }
 
 pub struct FrameBufferIteratorMut<'a> {
-  framebuffer: &'a mut FrameBuffer,
+  framebuffer: &'a mut Canvas,
   index: usize,
 }
 
@@ -140,7 +156,7 @@ impl<'a> Iterator for FrameBufferIteratorMut<'a> {
   }
 }
 
-impl<'a> IntoIterator for &'a FrameBuffer {
+impl<'a> IntoIterator for &'a Canvas {
   type IntoIter = FrameBufferIterator<'a>;
   type Item = &'a u8;
 
@@ -149,11 +165,32 @@ impl<'a> IntoIterator for &'a FrameBuffer {
   }
 }
 
-impl<'a> IntoIterator for &'a mut FrameBuffer {
+impl<'a> IntoIterator for &'a mut Canvas {
   type IntoIter = FrameBufferIteratorMut<'a>;
   type Item = &'a mut u8;
 
   fn into_iter(self) -> Self::IntoIter {
     self.iter_mut()
+  }
+}
+
+impl OriginDimensions for Canvas {
+  fn size(&self) -> Size {
+    Size::new(self.info.width as u32, self.info.height as u32)
+  }
+}
+
+impl DrawTarget for Canvas {
+  type Color = Rgb888;
+  type Error = Infallible;
+
+  fn draw_iter<I>(&mut self, pixels: I) -> Result<(), Self::Error>
+  where
+    I: IntoIterator<Item = Pixel<Self::Color>>,
+  {
+    for pixel in pixels {
+      self.draw_pixel(pixel);
+    }
+    Ok(())
   }
 }

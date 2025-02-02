@@ -1,4 +1,4 @@
-use super::platform_impl;
+use crate::hal::platform_impl;
 
 pub fn halt() -> ! {
   loop {
