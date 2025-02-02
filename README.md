@@ -1,6 +1,6 @@
 # [`dioxide_os`](https://github.com/dioxide-os/dioxide)
 
-Dioxide is an experimental OS built in pure Rust for educational purposes. It was made by following the excellent material by phil-opp, [Writing an OS in Rust](https://os.phil-opp.com/).
+Dioxide is an experimental OS built in pure Rust for educational purposes. Right now, it doesn't do a whole lot. It was made by following the excellent material by phil-opp, [Writing an OS in Rust](https://os.phil-opp.com/).
 
 You will find most of the code for the kernel in the `crates/dioxide` directory.
 
