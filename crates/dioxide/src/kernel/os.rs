@@ -7,7 +7,7 @@ pub struct OS {
 
 impl OS {
   pub fn run(mut self) -> Result<(), OsError> {
-    self.framebuffer.clear_screen();
+    // self.framebuffer.clear_screen();
     // println!("{:#?}", self.framebuffer.info());
 
     // for byte in framebuffer.iter_mut() {
