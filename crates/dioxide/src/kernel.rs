@@ -5,6 +5,8 @@ use dioxide_hal::platform::{
   logger::{Logger, PlatformLogger},
 };
 
+use crate::eprintln;
+
 use self::{framebuffer::FrameBuffer, os::OS};
 
 pub(crate) mod framebuffer;
@@ -24,6 +26,7 @@ impl Kernel {
     let mut framebuffer = FrameBuffer::<'static>::new(boot_info)?;
     Self::setup_logger(&mut framebuffer);
 
+    log::info!("Setting up Dioxide OS");
     let os = OS { framebuffer };
 
     Some(Self { os })
@@ -37,8 +40,11 @@ impl Kernel {
   }
 
   pub fn run(self) -> ! {
-    if let Err(error) = self.os.run() {
-      panic!("{error}");
+    log::info!("Entering Dioxide OS");
+    let result = self.os.run();
+    log::info!("Exiting Dioxide OS");
+    if let Err(error) = result {
+      eprintln!("{error}");
     }
     platform::sys::halt();
   }

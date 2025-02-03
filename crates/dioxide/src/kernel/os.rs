@@ -1,4 +1,4 @@
-use super::framebuffer::FrameBuffer;
+use super::framebuffer::{Color, FrameBuffer, Position};
 use crate::error::OsError;
 
 pub struct OS {
@@ -13,12 +13,13 @@ impl OS {
     // for byte in framebuffer.iter_mut() {
     //   *byte = 0x69;
     // }
-    // for (x, y) in (20..100).flat_map(|x| (30..100).map(move |y| (x, y))) {
-    //   let position = framebuffer::Position { x, y };
-    //   let color = framebuffer::Color { r: 0, g: 255, b: 0 };
 
-    //   framebuffer.set_pixel(position, color)?;
-    // }
+    for (x, y) in (20..100).flat_map(|x| (30..100).map(move |y| (x, y))) {
+      let position = Position { x, y };
+      let color = Color { r: 0, g: 255, b: 0 };
+
+      self.framebuffer.set_pixel(position, color)?;
+    }
 
     // const VGA_BUFFER: *mut u8 = 0xb8000 as _;
     // static HELLO: &[u8] = b"Hello World!";
@@ -30,6 +31,7 @@ impl OS {
     // }
 
     // println!("bau bau");
+    
     Ok(())
   }
 }
