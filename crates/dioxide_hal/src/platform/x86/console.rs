@@ -1,21 +1,14 @@
-use crate::{
-  hal::console::{Console, Diagnostics},
-  std::*,
-};
-
-use self::sync::{LazyLock, Mutex, MutexGuard};
+use crate::platform::console::{Diagnostics, PlatformConsole};
 
 pub struct X86Console {
   chars_written: usize,
 }
 
-impl X86Console {
+impl PlatformConsole for X86Console {
   fn new() -> Self {
     Self { chars_written: 0 }
   }
 }
-
-impl Console for X86Console {}
 
 impl core::fmt::Write for X86Console {
   fn write_char(&mut self, c: char) -> core::fmt::Result {
@@ -47,7 +40,7 @@ impl Diagnostics for X86Console {
   }
 }
 
-pub fn console() -> MutexGuard<'static, impl Console> {
-  static CONSOLE: LazyLock<Mutex<X86Console>> = LazyLock::new(|| Mutex::new(X86Console::new()));
-  CONSOLE.lock()
-}
+// pub fn console() -> &'static X86Console {
+//   static CONSOLE: OnceCell<X86Console> = OnceCell::uninit();
+//   CONSOLE.get_or_init(X86Console::new)
+// }

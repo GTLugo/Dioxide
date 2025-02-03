@@ -4,6 +4,7 @@ members = [
   "crates/dioxide", 
   "crates/dioxide_boot",
   "crates/dioxide_derive",
+  "crates/dioxide_hal",
 ]
 resolver = "3"
 

@@ -1,34 +1,45 @@
 use bootloader_api::BootInfo;
+use conquer_once::spin::OnceCell;
+use dioxide_hal::platform::{
+  self,
+  logger::{Logger, PlatformLogger},
+};
 
-use self::{canvas::Canvas, os::OS};
-use crate::std::sys::halt;
+use self::{framebuffer::FrameBuffer, os::OS};
 
-mod canvas;
+pub(crate) mod framebuffer;
 mod os;
+
+static LOGGER: OnceCell<Logger> = OnceCell::uninit();
 
 ///
 /// This pretty much just sets up the OS. Wraps and converts FFI boot objects.
 ///
 pub struct Kernel {
-  _boot_info: &'static mut BootInfo,
   os: OS,
 }
 
 impl Kernel {
-  pub fn new(boot_info: &'static mut BootInfo) -> Self {
-    let os = OS {
-      canvas: Canvas::new(boot_info),
-    };
-    Self {
-      _boot_info: boot_info,
-      os,
-    }
+  pub fn new(boot_info: &'static mut BootInfo) -> Option<Self> {
+    let mut framebuffer = FrameBuffer::<'static>::new(boot_info)?;
+    Self::setup_logger(&mut framebuffer);
+
+    let os = OS { framebuffer };
+
+    Some(Self { os })
+  }
+
+  fn setup_logger(framebuffer: &mut FrameBuffer<'static>) {
+    let logger = LOGGER.get_or_init(|| Logger::new(unsafe { framebuffer.buffer() }, *framebuffer.info()));
+    log::set_logger(logger.internal()).expect("Logger already set");
+    log::set_max_level(log::LevelFilter::Trace);
+    log::info!("Logger initialized");
   }
 
   pub fn run(self) -> ! {
     if let Err(error) = self.os.run() {
-      panic!("FATAL | {error}");
+      panic!("{error}");
     }
-    halt()
+    platform::sys::halt();
   }
 }

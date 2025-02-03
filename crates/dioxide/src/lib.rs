@@ -13,10 +13,9 @@ macro_rules! nop {
 
 pub mod kernel;
 
-mod hal;
 mod error;
 mod std;
 
-pub use dioxide_derive::entrypoint;
+// pub use dioxide_derive::entrypoint;
 
 pub use crate::kernel::Kernel;

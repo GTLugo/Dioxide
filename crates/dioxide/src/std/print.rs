@@ -1,9 +1,10 @@
 use core::fmt::Write;
 
-use crate::hal;
+use dioxide_hal::platform;
 
 pub fn _print(args: core::fmt::Arguments) {
-  hal::console::console().write_fmt(args).unwrap();
+  // platform::console::console().write_fmt(args).unwrap();
+  log::info!("{}", args);
 }
 
 /// Prints without a newline.
@@ -27,7 +28,8 @@ macro_rules! println {
 
 // temporary identical impl to _print
 pub fn _eprint(args: core::fmt::Arguments) {
-  hal::console::console().write_fmt(args).unwrap();
+  // platform::console::console().write_fmt(args).unwrap();
+  log::error!("{}", args);
 }
 
 /// Prints without a newline.

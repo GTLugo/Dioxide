@@ -1,5 +1,5 @@
 [package]
-name    = "dioxide"
+name    = "dioxide-hal"
 version = "0.0.1"
 
 readme.workspace = true
@@ -17,21 +17,11 @@ thiserror = { version = "2.0.x", default-features = false }
 embedded-graphics = "0.8.x"
 log = { version = "0.4.x", default-features = false }
 conquer-once = { version = "0.4.0", default-features = false } # remove once the std lib is usable
+once_cell = { version = "1.20.x", default-features = false } 
 
-[dependencies.dioxide_derive]
-path    = "../dioxide_derive"
-version = "0.0.1"
-
-[dependencies.dioxide-hal]
-version = "0.0.1"
-path = "../dioxide_hal"
+bootloader-x86_64-common = { version = "0.11.3", optional = true }
 
 [features]
 default = ["x86"]
-rpi5 = ["dioxide-hal/rpi5"]
-x86 = ["dioxide-hal/x86"]
-
-[[bin]]
-name = "dioxide"
-test = false
-bench = false
+rpi5 = []
+x86 = ["dep:bootloader-x86_64-common"]

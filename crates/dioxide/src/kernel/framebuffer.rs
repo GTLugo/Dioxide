@@ -21,18 +21,32 @@ pub struct Color {
   pub b: u8,
 }
 
-pub struct Canvas {
-  buffer: &'static mut [u8],
+#[derive(Debug)]
+pub struct FrameBuffer<'f> {
+  buffer: &'f mut [u8],
   info: FrameBufferInfo,
 }
 
-impl Canvas {
+impl<'f> FrameBuffer<'f> {
   pub fn new(boot_info: &mut BootInfo) -> Option<Self> {
     boot_info.framebuffer.take().map(|framebuffer| {
       let info = framebuffer.info();
       let buffer = framebuffer.into_buffer();
       Self { buffer, info }
     })
+  }
+
+  pub fn info(&self) -> &FrameBufferInfo {
+    &self.info
+  }
+
+  ///
+  /// # Safety 
+  /// 
+  /// This almost CERTAINLY is not safe at all. But I literally give up right now and will reap what I sow.
+  /// 
+  pub unsafe fn buffer(&mut self) -> &'static mut [u8] {
+    unsafe { (self.buffer as *mut [u8]).as_mut() }.unwrap()
   }
 
   pub fn set_pixel(&mut self, position: Position, color: Color) -> Result<Color, OsError> {
@@ -106,6 +120,10 @@ impl Canvas {
     }
   }
 
+  pub fn clear_screen(&mut self) {
+    let _ = self.clear(Rgb888::BLACK);
+  }
+
   pub fn iter(&self) -> FrameBufferIterator {
     FrameBufferIterator {
       framebuffer: self,
@@ -113,7 +131,7 @@ impl Canvas {
     }
   }
 
-  pub fn iter_mut(&mut self) -> FrameBufferIteratorMut {
+  pub fn iter_mut(&'f mut self) -> FrameBufferIteratorMut<'f> {
     FrameBufferIteratorMut {
       framebuffer: self,
       index: 0,
@@ -121,13 +139,13 @@ impl Canvas {
   }
 }
 
-pub struct FrameBufferIterator<'a> {
-  framebuffer: &'a Canvas,
+pub struct FrameBufferIterator<'f> {
+  framebuffer: &'f FrameBuffer<'f>,
   index: usize,
 }
 
-impl<'a> Iterator for FrameBufferIterator<'a> {
-  type Item = &'a u8;
+impl<'f> Iterator for FrameBufferIterator<'f> {
+  type Item = &'f u8;
 
   fn next(&mut self) -> Option<Self::Item> {
     self.framebuffer.buffer.get(self.index).inspect(|_| {
@@ -136,8 +154,8 @@ impl<'a> Iterator for FrameBufferIterator<'a> {
   }
 }
 
-pub struct FrameBufferIteratorMut<'a> {
-  framebuffer: &'a mut Canvas,
+pub struct FrameBufferIteratorMut<'f> {
+  framebuffer: &'f mut FrameBuffer<'f>,
   index: usize,
 }
 
@@ -156,31 +174,31 @@ impl<'a> Iterator for FrameBufferIteratorMut<'a> {
   }
 }
 
-impl<'a> IntoIterator for &'a Canvas {
-  type IntoIter = FrameBufferIterator<'a>;
-  type Item = &'a u8;
+impl<'f> IntoIterator for &'f FrameBuffer<'f> {
+  type IntoIter = FrameBufferIterator<'f>;
+  type Item = &'f u8;
 
   fn into_iter(self) -> Self::IntoIter {
     self.iter()
   }
 }
 
-impl<'a> IntoIterator for &'a mut Canvas {
-  type IntoIter = FrameBufferIteratorMut<'a>;
-  type Item = &'a mut u8;
+impl<'f> IntoIterator for &'f mut FrameBuffer<'f> {
+  type IntoIter = FrameBufferIteratorMut<'f>;
+  type Item = &'f mut u8;
 
   fn into_iter(self) -> Self::IntoIter {
     self.iter_mut()
   }
 }
 
-impl OriginDimensions for Canvas {
+impl OriginDimensions for FrameBuffer<'_> {
   fn size(&self) -> Size {
     Size::new(self.info.width as u32, self.info.height as u32)
   }
 }
 
-impl DrawTarget for Canvas {
+impl DrawTarget for FrameBuffer<'_> {
   type Color = Rgb888;
   type Error = Infallible;
 
