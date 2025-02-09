@@ -1,0 +1,33 @@
+[package]
+name = "dioxide_boot"
+version = "0.0.1"
+
+readme.workspace = true
+description.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+keywords.workspace = true
+categories.workspace = true
+repository.workspace = true
+
+# default-run = "vbox-uefi"
+
+# [dependencies.ovmf-prebuilt]
+# version = "0.2.x"
+
+[dependencies.log]
+version = "0.4.x"
+
+[dependencies.uefi]
+version = "0.34.x"
+features = ["panic_handler", "logger"]
+
+# [build-dependencies]
+# bootloader = "0.11.x"
+
+# [build-dependencies.dioxide]
+# path = "../kernel"
+# version = "0.0.1"
+# artifact = "bin"
+# target = "x86_64-unknown-none"

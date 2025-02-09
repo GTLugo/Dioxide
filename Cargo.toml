@@ -1,10 +1,7 @@
 [workspace]
-default-members = ["crates/dioxide_boot"]
+# default-members = ["crates/dioxide_boot"]
 members = [
-  "crates/dioxide", 
-  "crates/dioxide_boot",
-  "crates/dioxide_derive",
-  "crates/dioxide_hal",
+  "crates/*",
 ]
 resolver = "3"
 
@@ -17,3 +14,10 @@ license     = "MIT"
 keywords    = ["dioxide", "os", "o2"]
 categories  = ["os", "embedded"]
 repository  = "https://github.com/dioxide-os/dioxide"
+
+[workspace.dependencies]
+# bootloader_api = { version = "0.x.x", path = "../../vendor/bootloader/api" }
+bootloader_api = { version = "0.11.x" }
+bootloader-x86_64-common = { version = "0.11.x" }
+thiserror = { version = "2.0.x", default-features = false }
+log = { version = "0.4.x", default-features = false }
