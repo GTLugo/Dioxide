@@ -6,7 +6,7 @@ use core::{
 use dioxide_hal::platform;
 use dioxide_std::eprintln;
 
-#[cfg(target_os = "none")]
+// #[cfg(target_os = "none")]
 #[panic_handler]
 pub fn panic(info: &PanicInfo) -> ! {
   panic_guard();
