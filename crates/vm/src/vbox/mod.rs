@@ -1,26 +1,19 @@
-#![allow(unused_attributes)]
-#![allow(dead_code)]
-#![feature(exit_status_error)]
+#[cfg(feature = "uefi")]
+pub mod uefi;
+#[cfg(feature = "uefi")]
+pub use uefi::*;
+
+#[cfg(feature = "bios")]
+pub mod bios;
+#[cfg(feature = "bios")]
+pub use bios::*;
 
 use std::{
-  fmt::Display,
   path::PathBuf,
   process::{Command, ExitStatusError, Stdio},
 };
 
-pub enum Uefi {
-  Enabled,
-  Disabled,
-}
-
-impl Display for Uefi {
-  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-    write!(f, "{}", match self {
-      Self::Enabled => "uefi",
-      Self::Disabled => "bios",
-    })
-  }
-}
+use crate::vm::Uefi;
 
 pub struct VirtualBox {
   name: String,
@@ -148,5 +141,3 @@ impl VirtualBox {
     exit_status.exit_ok()
   }
 }
-
-fn main() {}

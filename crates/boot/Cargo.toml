@@ -16,12 +16,19 @@ repository.workspace = true
 # [dependencies.ovmf-prebuilt]
 # version = "0.2.x"
 
-[dependencies.log]
-version = "0.4.x"
+[dependencies.dioxide-kernel]
+version = "0.0.1"
+path = "../kernel"
 
-[dependencies.uefi]
-version = "0.34.x"
-features = ["panic_handler", "logger"]
+[dependencies.bootloader_api]
+workspace = true
+
+# [dependencies.uefi]
+# version = "0.34.x"
+# features = ["panic_handler", "logger"]
+
+[features]
+default = []
 
 # [build-dependencies]
 # bootloader = "0.11.x"

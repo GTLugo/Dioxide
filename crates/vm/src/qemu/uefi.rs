@@ -5,7 +5,7 @@ use std::{
 
 use ovmf_prebuilt::{Arch, FileType, Prebuilt, Source};
 
-fn main() {
+pub fn run() {
   let prebuilt = Prebuilt::fetch(Source::LATEST, "target/ovmf").expect("failed to update prebuilt");
   let mut qemu = Command::new("qemu-system-x86_64");
   qemu

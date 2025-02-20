@@ -1,0 +1,29 @@
+[package]
+name = "dioxide-launcher"
+version = "0.0.1"
+
+readme.workspace = true
+description.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+keywords.workspace = true
+categories.workspace = true
+repository.workspace = true
+
+# default-run = "vbox-uefi"
+
+[dependencies.ovmf-prebuilt]
+version = "0.2.x"
+optional = true
+
+[build-dependencies]
+bootloader.workspace = true
+dioxide_boot = { path = "../boot", version = "0.0.1", artifact = "bin", target = "x86_64-unknown-none" }
+
+[features]
+default = ["vbox", "uefi"]
+qemu = ["dep:ovmf-prebuilt"]
+vbox = []
+uefi = []
+bios = []

@@ -3,7 +3,7 @@ use std::{
   process::{self, Command},
 };
 
-fn main() {
+pub fn run() {
   let mut qemu = Command::new("qemu-system-x86_64");
   qemu
     .arg("-drive")

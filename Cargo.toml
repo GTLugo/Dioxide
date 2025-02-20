@@ -1,5 +1,5 @@
 [workspace]
-# default-members = ["crates/dioxide_boot"]
+default-members = ["crates/vm"]
 members = [
   "crates/*",
 ]
@@ -17,6 +17,7 @@ repository  = "https://github.com/dioxide-os/dioxide"
 
 [workspace.dependencies]
 # bootloader_api = { version = "0.x.x", path = "../../vendor/bootloader/api" }
+bootloader = { version = "0.11.x" }
 bootloader_api = { version = "0.11.x" }
 bootloader-x86_64-common = { version = "0.11.x" }
 thiserror = { version = "2.0.x", default-features = false }
