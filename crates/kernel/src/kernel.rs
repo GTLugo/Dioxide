@@ -18,6 +18,7 @@ impl Kernel {
   pub fn new(boot_info: &'static mut BootInfo) -> Option<Self> {
     let mut framebuffer = FrameBuffer::<'static>::new(boot_info)?;
     platform::logger::init(unsafe { framebuffer.buffer() }, *framebuffer.info());
+    platform::interrupts::init_idt();
 
     log::info!("Setting up Dioxide OS");
     let os = OS { framebuffer };

@@ -1,4 +1,6 @@
-use super::framebuffer::{Color, FrameBuffer, Position};
+use dioxide_std::println;
+
+use super::framebuffer::*;
 use crate::error::OsError;
 
 pub struct OS {
@@ -6,32 +8,14 @@ pub struct OS {
 }
 
 impl OS {
-  pub fn run(mut self) -> Result<(), OsError> {
-    // self.framebuffer.clear_screen();
-    // println!("{:#?}", self.framebuffer.info());
+  pub fn run(self) -> Result<(), OsError> {
+    println!("bau bau");
 
-    // for byte in framebuffer.iter_mut() {
-    //   *byte = 0x69;
-    // }
-
-    for (x, y) in (50..150).flat_map(|x| (50..150).map(move |y| (x, y))) {
-      let position = Position { x, y };
-      let color = Color { r: 0, g: 255, b: 0 };
-
-      self.framebuffer.set_pixel(position, color)?;
+    fn f() {
+      f();
     }
+    f();
 
-    // const VGA_BUFFER: *mut u8 = 0xb8000 as _;
-    // static HELLO: &[u8] = b"Hello World!";
-    // for (i, &byte) in HELLO.iter().enumerate() {
-    //   unsafe {
-    //     *VGA_BUFFER.offset(i as isize * 2) = byte;
-    //     *VGA_BUFFER.offset(i as isize * 2 + 1) = 0xb;
-    //   }
-    // }
-
-    // println!("bau bau");
-    
     Ok(())
   }
 }

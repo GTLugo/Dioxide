@@ -4,6 +4,9 @@
 /// NOT FOR ACTUAL USE, ONLY FOR BRAINSTORMING AND TESTING.
 /// ANY CODE HERE SHOULD BE THOROUGHLY SCRUTINIZED AND
 /// TESTED BEFORE TRUSTING!!!
+/// 
+/// This must be swapped out after doing more research into
+/// shared locks and atomics.
 ///
 use core::{
   cell::UnsafeCell,
